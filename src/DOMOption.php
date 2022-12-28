@@ -1,6 +1,6 @@
 <?php
 
-namespace Clubs;
+namespace Salsan\Clubs;
 
 use DOMDocument;
 use DOMXPath;
