@@ -1,7 +1,6 @@
 {
     "name": "salsan/clubs",
     "description": "Library to get data about chess clubs from website Federazione Scacchistica Italiana",
-    "version": "1.0.0",
     "type": "library",    
     "keywords": ["chess", "scacchi", "fsi", "Federazione Scacchistica Italiana"],
     "homepage": "https://github.com/salsan/Clubs",
