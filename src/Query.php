@@ -24,8 +24,8 @@ class Query
         $this->year = $paramters['year'] ?? '';
         $this->den = $paramters['den'] ?? '';
 
-        $this->url = "https://www.federscacchi.it/str_soc.php?" .
-            "id={$this->clubId}" .
+        $this->url .=
+            "?id={$this->clubId}" .
             "&reg={$this->reg}" .
             "&pro={$this->pro}" .
             "&ord={$this->ord}" .
