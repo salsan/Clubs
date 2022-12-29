@@ -21,7 +21,7 @@ class Form
     public function getRegions(): array
     {
         $option = new DOMOption();
-        return($option->getArray("'reg'", $this->dom));     
+        return ($option->getArray("'reg'", $this->dom));
     }
 
     public function getProvinces(): array
