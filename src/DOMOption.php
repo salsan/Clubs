@@ -5,7 +5,7 @@ namespace Salsan\Clubs;
 use DOMDocument;
 use DOMXPath;
 
-class DOMOption
+trait DOMOption
 {
     public function getArray(string $name, DOMDocument $dom): array
     {
