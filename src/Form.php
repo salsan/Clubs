@@ -6,7 +6,7 @@ use DOMDocument;
 
 class Form
 {
-    use DOMOption;
+    use DOMOptionTrait;
 
     private DOMDocument $dom;
     private string $url = "https://www.federscacchi.it/str_soc.php";
