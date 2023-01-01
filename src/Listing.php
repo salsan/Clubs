@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Salsan\Clubs;
 
 use DOMDocument;
 
 class Listing
 {
- private DOMDocument $dom;
+  private DOMDocument $dom;
 
   function __construct()
   {
