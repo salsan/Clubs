@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Salsan\Clubs;
 
 use DOMDocument;
@@ -15,24 +17,24 @@ class Query
         $this->dom = new DOMDocument();
         libxml_use_internal_errors(true);
 
-        $this->clubId = $paramters['clubId'] ?? '';
-        $this->reg = $paramters['reg'] ?? '';
-        $this->pro = $paramters['pro'] ?? '';
-        $this->ord = $paramters['ord'] ?? '';
-        $this->senso = $paramters['senso'] ?? '';
-        $this->asc = $paramters['asc'] ?? '';
-        $this->year = $paramters['year'] ?? '';
-        $this->den = $paramters['den'] ?? '';
+        $clubId = $paramters['clubId'] ?? '';
+        $reg = $paramters['reg'] ?? '';
+        $pro = $paramters['pro'] ?? '';
+        $ord = $paramters['ord'] ?? '';
+        $senso = $paramters['senso'] ?? '';
+        $asc = $paramters['asc'] ?? '';
+        $year = $paramters['year'] ?? '';
+        $den = $paramters['den'] ?? '';
 
         $this->url .=
-            "?id={$this->clubId}" .
-            "&reg={$this->reg}" .
-            "&pro={$this->pro}" .
-            "&ord={$this->ord}" .
-            "&senso={$this->senso}" .
-            "&asc={$this->asc}" .
-            "&anno={$this->year}" .
-            "&den={$this->den}" .
+            "?id={$clubId}" .
+            "&reg={$reg}" .
+            "&pro={$pro}" .
+            "&ord={$ord}" .
+            "&senso={$senso}" .
+            "&asc={$asc}" .
+            "&anno={$year}" .
+            "&den={$den}" .
             "&ric=1";
 
         $this->dom->loadHTMLFile($this->url);
@@ -105,6 +107,6 @@ class Query
             0
         );
 
-        return $clubs_number[0];
+        return (int) $clubs_number[0];
     }
 }
