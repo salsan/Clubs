@@ -1,5 +1,19 @@
 {
   "scripts": {
     "PHPUnit": ".\\vendor\\bin\\phpunit"
-  }
+  },
+  "name": "clubs",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salsan/Clubs.git"
+  },
+  "author": "Salvatore Santagati",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/salsan/Clubs/issues"
+  },
+  "homepage": "https://github.com/salsan/Clubs#readme"
 }
