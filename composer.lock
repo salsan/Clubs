@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c3850e157a9b97b106922c7fa96f156f",
+    "content-hash": "90ab53f0f0b9b1fbd645f85aa4bad222",
     "packages": [
         {
             "name": "salsan/utils",
