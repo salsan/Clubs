@@ -4,8 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b87355107afcd23480fd5e8aebdaef48",
-    "packages": [],
+    "content-hash": "c3850e157a9b97b106922c7fa96f156f",
+    "packages": [
+        {
+            "name": "salsan/utils",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/salsan/PHPUtils.git",
+                "reference": "9339ff43baebddec286712e240b932d6ff1ccf96"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/salsan/PHPUtils/zipball/9339ff43baebddec286712e240b932d6ff1ccf96",
+                "reference": "9339ff43baebddec286712e240b932d6ff1ccf96",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1.10"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "9.5.27"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Salsan\\Utils\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Salvatore Santagati",
+                    "email": "github@salsan.dev"
+                }
+            ],
+            "description": "Utils is a generic PHP library for my personal project",
+            "keywords": [
+                "dom",
+                "php",
+                "trait"
+            ],
+            "support": {
+                "source": "https://github.com/salsan/PHPUtils/tree/main",
+                "issues": "https://github.com/salsan/PHPUtils/issues"
+            },
+            "time": "2023-01-04T09:01:44+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
@@ -1740,7 +1794,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "salsan/utils": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

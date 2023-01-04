@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Salsan\Clubs;
 
 use DOMDocument;
+use Salsan\Utils\DOM\Form\DOMOptionTrait;
 
 class Form
 {
+ 
     use DOMOptionTrait;
 
     private DOMDocument $dom;
