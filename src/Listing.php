@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Salsan\Clubs;
 
 use DOMDocument;
+use Salsan\Utils\DOM\Form\DOMOptionTrait;
 
 class Listing
 {
+  use DOMOptionTrait;
   private DOMDocument $dom;
 
   function __construct()
@@ -23,16 +25,16 @@ class Listing
   public function clubs(): iterable
   {
     $clubs = [];
-    $reg = "/[0-9]+\s-\s(\X+)/";
+    $reg = '/\d+ - /m';
 
-    $options = $this->dom->getElementsByTagName("option");
+    $options = $this->getArray('signup_societa', $this->dom);
 
     foreach ($options as $index => $club) {
       if ($index > 0) {
-        preg_match($reg, $club->nodeValue, $club_name);
-        $clubs[$club->getAttribute("value")] = $club_name[1];
+        $clubs[$index] = preg_replace($reg, '', $club);
       }
     }
+
     return $clubs;
   }
 
