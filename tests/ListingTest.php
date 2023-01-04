@@ -10,7 +10,7 @@ final class ListingTest extends TestCase
 {
     public function testInit(): object
     {
-        $listing = new Clubs\Listing();       
+        $listing = new Clubs\Listing();
         $this->assertIsObject($listing);
 
         return $listing;
@@ -32,5 +32,15 @@ final class ListingTest extends TestCase
     {
         $clubName = $listing->getNameFromId(15101);
         $this->assertStringContainsStringIgnoringCase('ASD ACCADEMIA SCACCHISTICA DON PIETRO CARRERA', $clubName);
+    }
+
+    /**
+     * @depends testInit
+     */
+
+    public function testGetNameFromFirstId($listing): void
+    {
+        $clubName = $listing->getNameFromId(1001);
+        $this->assertStringContainsStringIgnoringCase('CIRCOLO SCACCHISTICO AQUILANO', $clubName);
     }
 }
