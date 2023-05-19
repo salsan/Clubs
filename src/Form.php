@@ -6,11 +6,12 @@ namespace Salsan\Clubs;
 
 use DOMDocument;
 use Salsan\Utils\DOM\Form\DOMOptionTrait;
+use Salsan\Utils\DOM\DOMDocumentTrait;
 
 class Form
 {
- 
     use DOMOptionTrait;
+    use DOMDocumentTrait;
 
     private DOMDocument $dom;
     private string $url = "https://www.federscacchi.it/str_soc.php";
@@ -18,10 +19,7 @@ class Form
 
     function __construct()
     {
-        $this->dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-
-        $this->dom->loadHTMLFile($this->url);
+        $this->dom = $this->getHTML($this->url, null);
     }
 
     public function getRegions(): array

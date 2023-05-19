@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Salsan\Clubs;
 
 use DOMDocument;
+use Salsan\Utils\DOM\DOMDocumentTrait;
 
 class Query
 {
+
+    use DOMDocumentTrait;
+    
     private DOMDocument $dom;
     private string $url = "https://www.federscacchi.it/str_soc.php";
 
     function __construct(array $paramters)
     {
-
-        $this->dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-
         $clubId = $paramters['clubId'] ?? '';
         $reg = $paramters['reg'] ?? '';
         $pro = $paramters['pro'] ?? '';
@@ -37,7 +37,8 @@ class Query
             "&den={$den}" .
             "&ric=1";
 
-        $this->dom->loadHTMLFile($this->url);
+        $this->dom = $this->getHTML($this->url, null);
+
     }
 
     public function getInfo(): iterable

@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace Salsan\Clubs;
 
 use DOMDocument;
+use Salsan\Utils\DOM\DOMDocumentTrait;
 use Salsan\Utils\DOM\Form\DOMOptionTrait;
 
 class Listing
 {
   use DOMOptionTrait;
+  use DOMDocumentTrait;
   private DOMDocument $dom;
 
   function __construct()
   {
-    $this->dom = new DOMDocument();
-    libxml_use_internal_errors(true);
-
     $url = "https://www.federscacchi.it/tema/";
-
-    $this->dom->loadHTMLFile($url);
+   
+    $this->dom = $this->getHTML($url, null);
   }
 
   public function clubs(): iterable
