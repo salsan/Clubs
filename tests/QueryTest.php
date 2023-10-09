@@ -8,7 +8,8 @@ use Salsan\Clubs;
 final class QueryTest extends TestCase
 {
     private $paramters = array(
-        'clubId' => '15101'
+        'clubId' => '15101',
+        'year' => '2023',
     );
 
     public function testInit(): object
@@ -32,7 +33,9 @@ final class QueryTest extends TestCase
             $this->assertStringContainsStringIgnoringCase('SICILIA', $club['region']);
             $this->assertIsString($club['president']);
             $this->assertIsString($club['website']);
-            $this->assertIsString($club['address']);
+            $this->assertIsNumeric($club['address']['postal_code']);
+            $this->assertIsString($club['address']['street']);
+            $this->assertStringContainsStringIgnoringCase('Catania' , $club['address']['city']);
             $this->assertEquals(2, count($club['contact']));
             $this->assertGreaterThanOrEqual(1, count($club['councilors']));
         }
