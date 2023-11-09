@@ -74,16 +74,16 @@ class Query
             $address = explode(' - ', $row[11 + $club_select]->textContent);
 
             $club[$id]['address'] = array(
-                'postal_code' => $address[0],
-                'street'      => $address[1],
-                'city'        => $address[2],
+                'postal_code' => $address[0] ?? '',
+                'street'      => $address[1] ?? '',
+                'city'        => $address[2] ?? '',
             );
 
             preg_match_all($reg, $row[12 + $club_select]->textContent, $matches, PREG_SET_ORDER, 0);
 
             $club[$id]['contact'] = array(
-                'tel'   => $matches[0][1],
-                'email' => $matches[0][2],
+                'tel'   => $matches[0][1]  ?? '',
+                'email' => $matches[0][2]  ?? '',
             );
 
             $councilorsArr = explode(
