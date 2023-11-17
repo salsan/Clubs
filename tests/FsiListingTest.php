@@ -6,7 +6,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use Salsan\Clubs\Fsi;
 
-final class ListingTest extends TestCase
+final class FsiListingTest extends TestCase
 {
     public function testInit(): object
     {

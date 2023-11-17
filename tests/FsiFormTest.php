@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Salsan\Clubs\Fsi;
 
 
-final class FormTest extends TestCase
+final class FsiFormTest extends TestCase
 {
     public function testInit(): object
     {
