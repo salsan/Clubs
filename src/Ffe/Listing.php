@@ -32,11 +32,11 @@ class Listing
 
         do {
             for ($i = 2; $i <= $clubs_number; $i++) {
-                $club = $this->dom->getElementsByTagName('tr')->item($i - 2)->getElementsByTagName('td')[1]->textContent ?? '';
+                $club = $this->dom->getElementsByTagName('tr')->item($i)->getElementsByTagName('td')[1]->textContent ?? '';
 
                 if (empty($club)) return $clubs;
 
-                array_unshift($clubs,  $club);
+                array_push($clubs,  $club);
             }
 
             $page++;
