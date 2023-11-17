@@ -39,7 +39,11 @@ final class FfeListingTest extends TestCase
      * @depends testInit
      */
     public function testGetListClubs($listing): void
-    {
-        $this->assertIsArray($listing->clubs());
+    {        
+        $clubs = $listing->clubs();
+        $this->assertIsArray($clubs);
+        $this->assertStringContainsStringIgnoringCase($clubs[1], 'Marseille-Echecs');
+        $this->assertStringContainsStringIgnoringCase($clubs[count($clubs)-1], 'Echiquier Alairacois');
+
     }
 }
