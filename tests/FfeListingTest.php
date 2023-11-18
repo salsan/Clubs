@@ -42,7 +42,7 @@ final class FfeListingTest extends TestCase
     {        
         $clubs = $listing->clubs();
         $this->assertIsArray($clubs);
-        $this->assertStringContainsStringIgnoringCase($clubs[1], 'Marseille-Echecs');
+        $this->assertStringContainsStringIgnoringCase($clubs[0], 'Marseille-Echecs');
         $this->assertStringContainsStringIgnoringCase($clubs[count($clubs)-1], 'Echiquier Alairacois');
 
     }
