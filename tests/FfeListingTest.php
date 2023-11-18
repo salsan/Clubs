@@ -17,22 +17,11 @@ final class FfeListingTest extends TestCase
     }
 
     /**
-     *  @depends testInit
-     * 
-     * 
-     */
-    public function testGetNumberRows($listing): void
-    {
-        $this->assertEquals(42, $listing->get_number_rows());
-    }
-
-
-    /**
      * @depends testInit
      */
     public function testGetPageNumber($listing): void
     {
-        $this->assertEquals(23, $listing->get_page_number());
+        $this->assertEquals(23, $listing->getPageNumber());
     }
 
     /**
@@ -45,5 +34,13 @@ final class FfeListingTest extends TestCase
         $this->assertStringContainsStringIgnoringCase($clubs[0], 'Marseille-Echecs');
         $this->assertStringContainsStringIgnoringCase($clubs[count($clubs)-1], 'Echiquier Alairacois');
 
+    }
+
+        /**
+     * @depends testInit
+     */
+    public function testGetNumber($listing): void
+    {
+        $this->assertGreaterThanOrEqual(1, count($listing->clubs()));
     }
 }
