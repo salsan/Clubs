@@ -20,13 +20,13 @@ class Listing
 
         $this->url = "http://echecs.asso.fr/ListeTops.aspx?Action=CLUB";
 
-        $this->dom->loadHTML($this->get_page(1));
+        $this->dom->loadHTML($this->getPage(1));
     }
 
     public function clubs(): array
     {
         $clubs = [];
-        $page_number = $this->get_page_number();
+        $page_number = $this->getPageNumber();
         $page = 1;
 
         do {
@@ -39,13 +39,13 @@ class Listing
             }
 
             $page++;
-            $this->dom->loadHTML($this->get_page($page));
+            $this->dom->loadHTML($this->getPage($page));
         } while ($page <= $page_number);
 
         return $clubs;
     }
 
-    public function get_page($page_number)
+    public function getPage($page_number)
     {
         $postData = array(
             '__EVENTTARGET'   => 'ctl00$ContentPlaceHolderMain$PagerFooter',
@@ -75,7 +75,7 @@ class Listing
         return $response;
     }
 
-    public function get_page_number()
+    public function getPageNumber()
     {
         $xpath = new DOMXPath($this->dom);
 
@@ -84,7 +84,7 @@ class Listing
         return $last_page;
     }
 
-    public function get_table()
+    public function getTable()
     {
         $xpath = new DOMXPath($this->dom);
 
@@ -93,11 +93,8 @@ class Listing
         return $table;
     }
 
-    public function get_number_rows()
+    public function getNumber(): int
     {
-        $table = $this->get_table();
-        $number_row = count($table->getElementsByTagName('tr'));
-
-        return $number_row;
+        return count ($this->clubs());
     }
 }
