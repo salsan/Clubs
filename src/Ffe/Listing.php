@@ -79,9 +79,7 @@ class Listing
     {
         $xpath = new DOMXPath($this->dom);
 
-        $page = $xpath->query('//table[@class="Pager"]')->item(0);
-        $n_page = $xpath->query('.//td', $page);
-        $last_page = $n_page[$n_page->length - 2]->nodeValue;
+        $last_page = $xpath->query('//table[@class="Pager"]//td[last()-1]//a/text()')[0]->nodeValue;
 
         return $last_page;
     }
