@@ -27,23 +27,21 @@ class Listing
     {
         $clubs = [];
         $page_number = $this->get_page_number();
-        $clubs_number = $this->get_number_rows();
         $page = 1;
 
         do {
-            for ($i = 2; $i <= $clubs_number; $i++) {
-                $club = $this->dom->getElementsByTagName('tr')->item($i)->getElementsByTagName('td')[1]->textContent ?? '';
+            $xpath = new DOMXPath($this->dom);
 
-                if (empty($club)) return $clubs;
+            $clubs_list = $xpath->query('//table//tr[not(@class="liste_titre")]//td[2]//b/text()');
 
-                array_push($clubs,  $club);
+            foreach ($clubs_list as $club) {
+                array_push($clubs,   $club->nodeValue);
             }
 
             $page++;
             $this->dom->loadHTML($this->get_page($page));
         } while ($page <= $page_number);
 
-        var_dump($clubs);
         return $clubs;
     }
 
