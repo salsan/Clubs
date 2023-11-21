@@ -1,7 +1,7 @@
 {
     "name": "salsan/clubs",
     "description": "Library to get data about chess clubs from website Federazione Scacchistica Italiana",
-    "type": "library",    
+    "type": "library",
     "keywords": ["chess", "scacchi", "fsi", "Federazione Scacchistica Italiana"],
     "homepage": "https://github.com/salsan/Clubs",
     "license": "MIT",
@@ -24,7 +24,7 @@
         "salsan/utils": "dev-main"
     },
     "require-dev": {
-        "phpunit/phpunit": "9.5.27",
+        "phpunit/phpunit": "10.*",
         "squizlabs/php_codesniffer": "3.*"
     },
     "autoload-dev": {
@@ -35,8 +35,8 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:salsan/PHPUtils.git"          
+            "url": "git@github.com:salsan/PHPUtils.git"
         }
     ]
-    
+
 }
