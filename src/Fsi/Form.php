@@ -17,7 +17,7 @@ class Form
     private string $url = "https://www.federscacchi.it/str_soc.php";
 
 
-    function __construct()
+    public function __construct()
     {
         $this->dom = $this->getHTML($this->url, null);
     }

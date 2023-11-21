@@ -10,41 +10,42 @@ use Salsan\Utils\DOM\Form\DOMOptionTrait;
 
 class Listing
 {
-  use DOMOptionTrait;
-  use DOMDocumentTrait;
-  private DOMDocument $dom;
+    use DOMOptionTrait;
+    use DOMDocumentTrait;
 
-  function __construct()
-  {
-    $url = "https://www.federscacchi.it/tema/";
-   
-    $this->dom = $this->getHTML($url, null);
-  }
+    private DOMDocument $dom;
 
-  public function clubs(): iterable
-  {
-    $clubs = [];
-    $reg = '/\d+ - /m';
+    public function __construct()
+    {
+        $url = "https://www.federscacchi.it/tema/";
 
-    $options = $this->getArray('signup_societa', $this->dom);
-
-    foreach ($options as $index => $club) {
-      if ($index > 0) {
-        $clubs[$index] = preg_replace($reg, '', $club);
-      }
+        $this->dom = $this->getHTML($url, null);
     }
 
-    return $clubs;
-  }
+    public function clubs(): iterable
+    {
+        $clubs = [];
+        $reg = '/\d+ - /m';
 
-  public function getNumber(): int
-  {
-    return count($this->clubs());
-  }
+        $options = $this->getArray('signup_societa', $this->dom);
 
-  public function getNameFromId(int $id): string
-  {
-    $clubs = $this->clubs();
-    return $clubs[$id];
-  }
+        foreach ($options as $index => $club) {
+            if ($index > 0) {
+                $clubs[$index] = preg_replace($reg, '', $club);
+            }
+        }
+
+        return $clubs;
+    }
+
+    public function getNumber(): int
+    {
+        return count($this->clubs());
+    }
+
+    public function getNameFromId(int $id): string
+    {
+        $clubs = $this->clubs();
+        return $clubs[$id];
+    }
 }

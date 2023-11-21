@@ -12,7 +12,7 @@ class Listing
     private DOMDocument $dom;
     public $url;
 
-    function __construct()
+    public function __construct()
     {
         $this->dom = new DOMDocument();
         libxml_use_internal_errors(true);
@@ -35,7 +35,7 @@ class Listing
             $clubs_list = $xpath->query('//table//tr[not(@class="liste_titre")]//td[2]//b/text()');
 
             foreach ($clubs_list as $club) {
-                array_push($clubs,   $club->nodeValue);
+                array_push($clubs, $club->nodeValue);
             }
 
             $page++;
@@ -95,6 +95,6 @@ class Listing
 
     public function getNumber(): int
     {
-        return count ($this->clubs());
+        return count($this->clubs());
     }
 }

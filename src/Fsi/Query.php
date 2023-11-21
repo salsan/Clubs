@@ -14,7 +14,7 @@ class Query
     private DOMDocument $dom;
     private string $url = 'https://www.federscacchi.it/str_soc.php';
 
-    function __construct(array $paramters)
+    public function __construct(array $paramters)
     {
         $clubId = $paramters['clubId'] ?? '';
         $reg    = $paramters['reg'] ?? '';
