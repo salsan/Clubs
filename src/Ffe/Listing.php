@@ -6,21 +6,26 @@ namespace Salsan\Clubs\Ffe;
 
 use DOMDocument;
 use DOMXPath;
+use Salsan\Utils\DOM\DOMDocumentTrait;
 
 class Listing
 {
-    private DOMDocument $dom;
-    public $url;
+    use DOMDocumentTrait;
+
+    private array $dom = array('clubs' => '', 'departments' => '');
+    public $url = array('clubs' => null, 'departments' => null);
 
     public function __construct()
     {
-        $this->dom = new DOMDocument();
+        $this->dom['clubs'] = new DOMDocument();
         libxml_use_internal_errors(true);
 
 
-        $this->url = "http://echecs.asso.fr/ListeTops.aspx?Action=CLUB";
+        $this->url['clubs'] = "http://echecs.asso.fr/ListeTops.aspx?Action=CLUB";
+        $this->url['departments'] = 'http://echecs.asso.fr/Comites.aspx';
 
-        $this->dom->loadHTML($this->getPage(1));
+        $this->dom['clubs']->loadHTML($this->getPage(1));
+        $this->dom['departments'] =  $this->getHTML($this->url['departments'], null);
     }
 
     public function clubs(): array
@@ -30,7 +35,7 @@ class Listing
         $page = 1;
 
         do {
-            $xpath = new DOMXPath($this->dom);
+            $xpath = new DOMXPath($this->dom['clubs']);
 
             $clubs_list = $xpath->query('//table//tr[not(@class="liste_titre")]//td[2]//b/text()');
 
@@ -39,7 +44,7 @@ class Listing
             }
 
             $page++;
-            $this->dom->loadHTML($this->getPage($page));
+            $this->dom['clubs']->loadHTML($this->getPage($page));
         } while ($page <= $page_number);
 
         return $clubs;
@@ -53,7 +58,7 @@ class Listing
         );
 
         $options = array(
-            CURLOPT_URL            => $this->url,
+            CURLOPT_URL            => $this->url['clubs'],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_POST           => true,
@@ -77,7 +82,7 @@ class Listing
 
     public function getPageNumber()
     {
-        $xpath = new DOMXPath($this->dom);
+        $xpath = new DOMXPath($this->dom['clubs']);
 
         $last_page = $xpath->query('//table[@class="Pager"]//td[last()-1]//a/text()')[0]->nodeValue;
 
@@ -86,7 +91,7 @@ class Listing
 
     public function getTable()
     {
-        $xpath = new DOMXPath($this->dom);
+        $xpath = new DOMXPath($this->dom['clubs']);
 
         $table = $xpath->query('//div[@class="page-mid"]/table')->item(0);
 
@@ -96,5 +101,26 @@ class Listing
     public function getNumber(): int
     {
         return count($this->clubs());
+    }
+
+    public function departments(): array
+    {
+        $departments = [];
+
+        $xpath = new \DOMXPath($this->dom['departments']);
+
+        $areas = $xpath->query('//map[@name="MapDepartements"]/area');
+
+        foreach ($areas as $area) {
+            $page = $this->dom['departments']->saveHTML($area);
+
+            preg_match('/href="FicheComite\.aspx\?Ref=([0-9A-Za-z]+)".+alt="?([^"]+)"/', $page, $clubs);
+
+            if (isset($clubs[1]) && isset($clubs[2])) {
+                $departments[$clubs[1]] = $clubs[2];
+            }
+        }
+
+        return $departments;
     }
 }
