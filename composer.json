@@ -37,6 +37,11 @@
             "type": "vcs",
             "url": "git@github.com:salsan/PHPUtils.git"
         }
-    ]
+    ],
+    "config":{
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
 
 }
