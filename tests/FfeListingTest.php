@@ -41,4 +41,14 @@ final class FfeListingTest extends TestCase
     {
         $this->assertGreaterThanOrEqual(1, count($listing->clubs()));
     }
+
+     /**
+     * @depends testInit
+     */
+    public function testdepartment($listing): void
+    {
+        $department = $listing->departments();
+        $this->assertIsArray($department);
+        $this->assertStringContainsStringIgnoringCase($department['29'] , 'Finistère');
+    }
 }
