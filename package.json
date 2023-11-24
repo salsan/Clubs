@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "Test": ".\\vendor\\bin\\phpunit",
+    "Test": "vendor\\bin\\phpunit",
     "Linter": "vendor\\bin\\phpcs -v",
-    "Beautifier": "vendor\\bin\\phpcbf -v"
+    "Beautifier": "vendor\\bin\\phpcbf -v",
+    "Benchmark": "vendor\\bin\\phpbench run tests/Benchmark --report=default"
   },
   "name": "clubs",
   "directories": {
