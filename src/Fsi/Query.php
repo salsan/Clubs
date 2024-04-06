@@ -47,7 +47,7 @@ class Query
 
         $row = $this->dom
             ->getElementsByTagName('table')
-            ->item(5)
+            ->item(3)
             ->getElementsByTagName('td');
 
         $clubsNumber = $this->getNumber();
@@ -101,7 +101,7 @@ class Query
     {
         $row = $this->dom
             ->getElementsByTagName('table')
-            ->item(5)
+            ->item(3)
             ->getElementsByTagName('td');
 
         preg_match(
