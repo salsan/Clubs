@@ -14,10 +14,10 @@ class Form
     use DOMDocumentTrait;
 
     private DOMDocument $dom;
-    private string $url = "https://www.federscacchi.it/str_soc.php";
+    private string $url = "https://www.federscacchi.com/fsi/index.php/struttura/societa";
 
 
-    function __construct()
+    public function __construct()
     {
         $this->dom = $this->getHTML($this->url, null);
     }
@@ -32,10 +32,10 @@ class Form
         return ($this->getArray("'pro'", $this->dom));
     }
 
-    public function getOrder(): array
-    {
-        return ($this->getArray("'ord'", $this->dom));
-    }
+    // public function getOrder(): array
+    // {
+    //     return ($this->getArray("'ord'", $this->dom));
+    // }
 
     public function getDirection(): array
     {
