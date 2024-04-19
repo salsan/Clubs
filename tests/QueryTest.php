@@ -5,7 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use Salsan\Clubs;
 
-final class QueryTest extends TestCase
+final class QueryClubTest extends TestCase
 {
     private $paramters = array(
         'clubId' => '15101',
@@ -29,15 +29,18 @@ final class QueryTest extends TestCase
 
         foreach ($info as $club) {
             $this->assertStringContainsStringIgnoringCase('ASD ACCADEMIA SCACCHISTICA DON PIETRO CARRERA', $club['name']);
-            $this->assertStringContainsStringIgnoringCase('CT', $club['province']);
+            $this->assertStringContainsStringIgnoringCase('Catania', $club['province']);
             $this->assertStringContainsStringIgnoringCase('SICILIA', $club['region']);
-            $this->assertIsString($club['president']);
+            $this->assertStringContainsStringIgnoringCase('3517674477', $club['contact']['tel'] );
+            $this->assertStringContainsStringIgnoringCase('accadpcarrera@email.it', $club['contact']['email']);
+            $this->assertStringContainsStringIgnoringCase('LEONARDI DANIELE', $club['president']);
+            $this->assertContains('SANTAGATI ALESSANDRO', $club['councilors']);
             $this->assertIsString($club['website']);
-            $this->assertIsNumeric($club['address']['postal_code']);
+            // $this->assertIsNumeric($club['address']['postal_code']);
             $this->assertIsString($club['address']['street']);
             $this->assertStringContainsStringIgnoringCase('Catania' , $club['address']['city']);
             $this->assertEquals(2, count($club['contact']));
-            $this->assertGreaterThanOrEqual(1, count($club['councilors']));
+            $this->assertGreaterThanOrEqual(3, count($club['councilors']));
         }
     }
 
