@@ -61,10 +61,10 @@ class Query
                     //following-sibling::text()'
             );
 
-            $id =  $getID->length > 0 ? trim($getID->item(0)->nodeValue) : '';
+            $id =  $getID->length > 0 ? $this->trimString($getID->item(0)->nodeValue) : '';
 
             $getClubName = $xpath->query($xpath_root . '//h2/b');
-            $club[$id]['name'] =  $getClubName->length > 0 ? $getClubName->item(0)->nodeValue : '';
+            $club[$id]['name'] =  $getClubName->length > 0 ? $this->trimString($getClubName->item(0)->nodeValue) : '';
 
 
             $getProvince = $xpath->query(
@@ -72,28 +72,32 @@ class Query
                     '//b[contains(text(), "Provincia:")]
                 /following-sibling::text()[normalize-space()]'
             );
-            $club[$id]['province'] =  $getProvince->length > 0 ? $getProvince->item(0)->nodeValue : '';
+            $club[$id]['province'] =  $getProvince->length > 0 ?
+                $this->trimString($getProvince->item(0)->nodeValue)
+                : '';
 
             $getRegion = $xpath->query(
                 $xpath_root .
                     '//b[contains(text(), "Regione:")]
                 /following-sibling::text()[normalize-space()]'
             );
-            $club[$id]['region'] =  $getRegion->length > 0 ? $getRegion->item(0)->nodeValue : '';
+            $club[$id]['region'] =  $getRegion->length > 0 ?
+                $this->trimString($getRegion->item(0)->nodeValue) : '';
 
             $getPresident = $xpath->query(
                 $xpath_root .
                     '//b[contains(text(), "Presidente:")]
                 /following-sibling::text()[normalize-space()]'
             );
-            $club[$id]['president'] = $getPresident->length > 0 ? $getPresident->item(0)->nodeValue : '';
+            $club[$id]['president'] = $getPresident->length > 0 ?
+                $this->trimString($getPresident->item(0)->nodeValue) : '';
 
             $getWebsite =  $xpath->query(
                 $xpath_root .
                     '//a[b[contains(text(), "Sito Internet")]]/@href'
             );
 
-            $club[$id]['website'] = $getWebsite->length > 0 ? $getWebsite->item(0)->nodeValue : '';
+            $club[$id]['website'] = $getWebsite->length > 0 ? $this->trimString($getWebsite->item(0)->nodeValue) : '';
 
             $getAddress = $xpath->query(
                 $xpath_root .
@@ -104,9 +108,9 @@ class Query
             $address = $getAddress->length > 0 ? explode('-', $getAddress->item(0)->nodeValue) : '';
 
             $club[$id]['address'] = array(
-                'postal_code' => $address[0] ?? '',
-                'street'      => $address[1] ?? '',
-                'city'        => $address[2] ?? '',
+                'postal_code' => $this->trimString($address[0]) ?? '',
+                'street'      => $this->trimString($address[1]) ?? '',
+                'city'        => $this->trimString($address[2]) ?? '',
             );
 
             $getTelephone = $xpath->query(
@@ -114,7 +118,8 @@ class Query
                     '//b[contains(text(), "Telefono:")]
                 /following-sibling::text()[normalize-space()]'
             );
-            $club[$id]['contact']['tel'] = $getTelephone->length > 0 ? $getTelephone->item(0)->nodeValue : '';
+            $club[$id]['contact']['tel'] = $getTelephone->length > 0 ?
+                $this->trimString($getTelephone->item(0)->nodeValue) : '';
 
             $getEmail = $xpath->query(
                 $xpath_root .
@@ -128,7 +133,7 @@ class Query
                 /following-sibling::text()'
             );
             $club[$id]['councilors']  = $getCouncilors->length > 0
-                ? explode(';', $getCouncilors->item(0)->nodeValue, -1)
+                ? array_map(array($this, 'trimString'), explode(';', $getCouncilors->item(0)->nodeValue, -1))
                 :  '';
 
             $position += 8;
@@ -146,5 +151,10 @@ class Query
         $club_numbers = (int) $nodes->item(0)->nodeValue;
 
         return $club_numbers;
+    }
+
+    public function trimString($str): string
+    {
+        return preg_replace('/^\s+|\s+$/u', '', $str);
     }
 }
