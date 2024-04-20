@@ -27,23 +27,7 @@ final class QueryClubsTest extends TestCase
     {
         $info = $clubs->getInfo();
 
-        // foreach ($info as $club) {
-        //     $this->assertStringContainsStringIgnoringCase('ASD ACCADEMIA SCACCHISTICA DON PIETRO CARRERA', $club['name']);
-        //     $this->assertStringContainsStringIgnoringCase('Catania', $club['province']);
-        //     $this->assertStringContainsStringIgnoringCase('SICILIA', $club['region']);
-        //     $this->assertStringContainsStringIgnoringCase('3517674477', $club['contact']['tel'] );
-        //     $this->assertStringContainsStringIgnoringCase('accadpcarrera@email.it', $club['contact']['email']);
-        //     $this->assertStringContainsStringIgnoringCase('LEONARDI DANIELE', $club['president']);
-        //     $this->assertContains('SANTAGATI ALESSANDRO', $club['councilors']);
-        //     $this->assertIsString($club['website']);
-        //     $this->assertIsNumeric($club['address']['postal_code']);
-        //     $this->assertIsString($club['address']['street']);
-        //     $this->assertStringContainsStringIgnoringCase('Catania' , $club['address']['city']);
-        //     $this->assertEquals(2, count($club['contact']));
-        //     $this->assertGreaterThanOrEqual(3, count($club['councilors']));
-        // }
-
-        $this->assertEquals( 7 , count($info));
+        $this->assertEquals(7, count($info));
         // print_r($info);
     }
 
