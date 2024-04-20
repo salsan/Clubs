@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Salsan\Clubs\Fsi;
 
 use DOMDocument;
+use DOMXPath;
 use Salsan\Utils\DOM\DOMDocumentTrait;
 
 class Query
@@ -12,7 +13,7 @@ class Query
     use DOMDocumentTrait;
 
     private DOMDocument $dom;
-    private string $url = 'https://www.federscacchi.it/str_soc.php';
+    private string $url = 'https://www.federscacchi.com/fsi/index.php/struttura/societa';
 
     public function __construct(array $paramters)
     {
@@ -26,15 +27,15 @@ class Query
         $den    = $paramters['den'] ?? '';
 
         $this->url .=
-            "?id={$clubId}" .
-            "&reg={$reg}" .
-            "&pro={$pro}" .
+            "?idx={$clubId}" . // FSI ID
+            "&reg={$reg}" .    // Region
+            "&pro={$pro}" .    // Province
             "&ord={$ord}" .
-            "&senso={$senso}" .
+            "&senso={$senso}" . // Order List Asc or Desc
             "&asc={$asc}" .
-            "&anno={$year}" .
-            "&den={$den}" .
-            '&ric=1';
+            "&anno={$year}" .   // Year Affiliation
+            "&den={$den}" .     // Denomination
+            '&ric=1';           // Hidden Value
 
         $this->dom = $this->getHTML($this->url, null);
     }
@@ -42,76 +43,118 @@ class Query
     public function getInfo(): iterable
     {
         $club = array();
-        // Regular expression for email from https://www.linuxjournal.com/article/9585
-        $reg = '/(\d+)\W+\w-\w+\W+([a-zA-Z0-9]+[a-zA-Z0-9\._-]*@[a-zA-Z0-9_-]+[a-zA-Z0-9\._-]++)/';
 
-        $row = $this->dom
-            ->getElementsByTagName('table')
-            ->item(3)
-            ->getElementsByTagName('td');
+        $xpath = new DOMXPath($this->dom);
 
         $clubsNumber = $this->getNumber();
 
+        $position = 0;
+
         for ($i = 0; $clubsNumber > $i; $i++) {
-            // 14 is number of infocard for club
-            $club_select = 14 * $i;
+            $xpath_root = '//div[@class="alert alert-success"]
+                /following-sibling::div[ position() >' .  1 + $position
+                .  ' and position() < ' . 10 + $position  . ']';
 
-            $id = $row[6 + $club_select]->textContent;
+            $getID = $xpath->query(
+                $xpath_root .
+                    '//b[contains(text(), "Id FSI:")]
+                    //following-sibling::text()'
+            );
 
-            $club[$id]['name'] = $row[7 + $club_select]->textContent;
+            $id =  $getID->length > 0 ? $this->trimString($getID->item(0)->nodeValue) : '';
 
-            $club[$id]['province'] = $row[8 + $club_select]->textContent;
+            $getClubName = $xpath->query($xpath_root . '//h2/b');
+            $club[$id]['name'] =  $getClubName->length > 0 ? $this->trimString($getClubName->item(0)->nodeValue) : '';
 
-            $club[$id]['region'] = $row[9 + $club_select]->textContent;
 
-            $club[$id]['president'] = $row[10 + $club_select]->textContent;
-
-            $club[$id]['website'] =
-                $row[7 + $club_select]->getElementsByTagName('a')->length > 0
-                ? $row[7 + $club_select]->getElementsByTagName('a')[0]->getAttribute('href')
+            $getProvince = $xpath->query(
+                $xpath_root .
+                    '//b[contains(text(), "Provincia:")]
+                /following-sibling::text()[normalize-space()]'
+            );
+            $club[$id]['province'] =  $getProvince->length > 0 ?
+                $this->trimString($getProvince->item(0)->nodeValue)
                 : '';
 
-            $address = explode(' - ', $row[11 + $club_select]->textContent);
+            $getRegion = $xpath->query(
+                $xpath_root .
+                    '//b[contains(text(), "Regione:")]
+                /following-sibling::text()[normalize-space()]'
+            );
+            $club[$id]['region'] =  $getRegion->length > 0 ?
+                $this->trimString($getRegion->item(0)->nodeValue) : '';
+
+            $getPresident = $xpath->query(
+                $xpath_root .
+                    '//b[contains(text(), "Presidente:")]
+                /following-sibling::text()[normalize-space()]'
+            );
+            $club[$id]['president'] = $getPresident->length > 0 ?
+                $this->trimString($getPresident->item(0)->nodeValue) : '';
+
+            $getWebsite =  $xpath->query(
+                $xpath_root .
+                    '//a[b[contains(text(), "Sito Internet")]]/@href'
+            );
+
+            $club[$id]['website'] = $getWebsite->length > 0 ? $this->trimString($getWebsite->item(0)->nodeValue) : '';
+
+            $getAddress = $xpath->query(
+                $xpath_root .
+                    '//b[contains(text(), "Indirizzo:")]
+                /following-sibling::text()[normalize-space()]'
+            );
+
+            $address = $getAddress->length > 0 ? explode('-', $getAddress->item(0)->nodeValue) : '';
 
             $club[$id]['address'] = array(
-                'postal_code' => $address[0] ?? '',
-                'street'      => $address[1] ?? '',
-                'city'        => $address[2] ?? '',
+                'postal_code' => $this->trimString($address[0]) ?? '',
+                'street'      => $this->trimString($address[1]) ?? '',
+                'city'        => $this->trimString($address[2]) ?? '',
             );
 
-            preg_match_all($reg, $row[12 + $club_select]->textContent, $matches, PREG_SET_ORDER, 0);
-
-            $club[$id]['contact'] = array(
-                'tel'   => $matches[0][1]  ?? '',
-                'email' => $matches[0][2]  ?? '',
+            $getTelephone = $xpath->query(
+                $xpath_root .
+                    '//b[contains(text(), "Telefono:")]
+                /following-sibling::text()[normalize-space()]'
             );
+            $club[$id]['contact']['tel'] = $getTelephone->length > 0 ?
+                $this->trimString($getTelephone->item(0)->nodeValue) : '';
 
-            $councilorsArr = explode(
-                ';',
-                str_replace('Consiglio: ', '', $row[13 + $club_select]->textContent),
+            $getEmail = $xpath->query(
+                $xpath_root .
+                    "//joomla-hidden-mail/@text"
             );
+            $club[$id]['contact']['email'] = $getEmail->length > 0 ? base64_decode($getEmail->item(0)->nodeValue) : '';
 
-            array_pop($councilorsArr);
-            $club[$id]['councilors'] = $councilorsArr;
+            $getCouncilors = $xpath->query(
+                $xpath_root .
+                    '//b[contains(text(), "Consiglio:")]
+                /following-sibling::text()'
+            );
+            $club[$id]['councilors']  = $getCouncilors->length > 0
+                ? array_map(array($this, 'trimString'), explode(';', $getCouncilors->item(0)->nodeValue, -1))
+                :  '';
+
+            $position += 8;
         }
+
         return $club;
     }
 
     public function getNumber(): int
     {
-        $row = $this->dom
-            ->getElementsByTagName('table')
-            ->item(3)
-            ->getElementsByTagName('td');
+        $xpath = new DOMXPath($this->dom);
 
-        preg_match(
-            '/\d+/',
-            $row[count($row) - 1]->textContent,
-            $clubs_number,
-            0,
-            0
-        );
+        $nodes = $xpath->query('//div[@class="container-fluid"]//div[@class="alert alert-success"]//b');
 
-        return (int) $clubs_number[0];
+        $club_numbers = (int) $nodes->item(0)->nodeValue;
+
+        return $club_numbers;
+    }
+
+    public function trimString($str): string
+    {
+        return preg_replace('/^\s+|\s+$/u', '', $str);
     }
 }

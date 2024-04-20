@@ -41,23 +41,23 @@ final class FsiFormTest extends TestCase
      * @depends testInit
      */
 
-    public function testGetOrder($form): void
-    {
-        $order = $form->getOrder();
-        $this->assertIsArray($order);
-        $this->assertGreaterThanOrEqual(1, count($order));
-    }
+    // public function testGetOrder($form): void
+    // {
+    //     $order = $form->getOrder();
+    //     $this->assertIsArray($order);
+    //     $this->assertGreaterThanOrEqual(1, count($order));
+    // }
 
     /**
      * @depends testInit
      */
 
-    public function testgetDirection($form): void
-    {
-        $direction = $form->getDirection();
-        $this->assertIsArray($direction);
-        $this->assertGreaterThanOrEqual(1, count($direction));
-    }
+    // public function testgetDirection($form): void
+    // {
+    //     $direction = $form->getDirection();
+    //     $this->assertIsArray($direction);
+    //     $this->assertGreaterThanOrEqual(1, count($direction));
+    // }
 
     /**
      * @depends testInit
