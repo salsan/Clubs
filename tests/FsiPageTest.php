@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use Salsan\Clubs;
+use Salsan\Clubs\Fsi;
 
-final class PageTest extends TestCase
+final class FsiPageTest extends TestCase
 {
     private $paramters = array(
         'clubId' => '4058',
@@ -14,7 +14,7 @@ final class PageTest extends TestCase
 
     public function testInit(): object
     {
-        $clubs = new Clubs\Query($this->paramters);
+        $clubs = new Fsi\Query($this->paramters);
         $this->assertIsObject($clubs);
 
         return $clubs;

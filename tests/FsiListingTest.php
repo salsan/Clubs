@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 
 use PHPUnit\Framework\TestCase;
-use Salsan\Clubs;
+use Salsan\Clubs\Fsi;
 
-final class ListingTest extends TestCase
+final class FsiListingTest extends TestCase
 {
     public function testInit(): object
     {
-        $listing = new Clubs\Listing();
+        $listing = new Fsi\Listing();
         $this->assertIsObject($listing);
 
         return $listing;
