@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/salsan/PHPUtils.git",
-                "reference": "33f91acff43ad377d36529a9f8ba659078e6c2bb"
+                "reference": "cb209035b41277a6b52838dc0acaa16945ba287e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/salsan/PHPUtils/zipball/33f91acff43ad377d36529a9f8ba659078e6c2bb",
-                "reference": "33f91acff43ad377d36529a9f8ba659078e6c2bb",
+                "url": "https://api.github.com/repos/salsan/PHPUtils/zipball/cb209035b41277a6b52838dc0acaa16945ba287e",
+                "reference": "cb209035b41277a6b52838dc0acaa16945ba287e",
                 "shasum": ""
             },
             "require": {
@@ -58,7 +58,7 @@
                 "source": "https://github.com/salsan/PHPUtils/tree/main",
                 "issues": "https://github.com/salsan/PHPUtils/issues"
             },
-            "time": "2023-05-19T16:00:27+00:00"
+            "time": "2024-04-21T12:25:29+00:00"
         }
     ],
     "packages-dev": [
