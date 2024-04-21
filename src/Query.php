@@ -55,57 +55,44 @@ class Query
                 /following-sibling::div[ position() >' .  1 + $position
                 .  ' and position() < ' . 10 + $position  . ']';
 
-            $getID = $xpath->query(
-                $xpath_root .
-                    '//b[contains(text(), "Id FSI:")]
-                    //following-sibling::text()'
+            $id = $this->getNodeValue(
+                $xpath,
+                $xpath_root . '//b[contains(text(), "Id FSI:")]//following-sibling::text()'
             );
 
-            $id =  $getID->length > 0 ? $this->trimString($getID->item(0)->nodeValue) : '';
-
-            $getClubName = $xpath->query($xpath_root . '//h2/b');
-            $club[$id]['name'] =  $getClubName->length > 0 ? $this->trimString($getClubName->item(0)->nodeValue) : '';
-
-
-            $getProvince = $xpath->query(
-                $xpath_root .
-                    '//b[contains(text(), "Provincia:")]
-                /following-sibling::text()[normalize-space()]'
-            );
-            $club[$id]['province'] =  $getProvince->length > 0 ?
-                $this->trimString($getProvince->item(0)->nodeValue)
-                : '';
-
-            $getRegion = $xpath->query(
-                $xpath_root .
-                    '//b[contains(text(), "Regione:")]
-                /following-sibling::text()[normalize-space()]'
-            );
-            $club[$id]['region'] =  $getRegion->length > 0 ?
-                $this->trimString($getRegion->item(0)->nodeValue) : '';
-
-            $getPresident = $xpath->query(
-                $xpath_root .
-                    '//b[contains(text(), "Presidente:")]
-                /following-sibling::text()[normalize-space()]'
-            );
-            $club[$id]['president'] = $getPresident->length > 0 ?
-                $this->trimString($getPresident->item(0)->nodeValue) : '';
-
-            $getWebsite =  $xpath->query(
-                $xpath_root .
-                    '//a[b[contains(text(), "Sito Internet")]]/@href'
+            $club[$id]['name'] = $this->getNodeValue(
+                $xpath,
+                $xpath_root .  '//h2/b'
             );
 
-            $club[$id]['website'] = $getWebsite->length > 0 ? $this->trimString($getWebsite->item(0)->nodeValue) : '';
-
-            $getAddress = $xpath->query(
-                $xpath_root .
-                    '//b[contains(text(), "Indirizzo:")]
-                /following-sibling::text()[normalize-space()]'
+            $club[$id]['province'] = $this->getNodeValue(
+                $xpath,
+                $xpath_root  . '//b[contains(text(), "Provincia:")]/following-sibling::text()[normalize-space()]'
             );
 
-            $address = $getAddress->length > 0 ? explode('-', $getAddress->item(0)->nodeValue) : '';
+            $club[$id]['region'] = $this->getNodeValue(
+                $xpath,
+                $xpath_root . '//b[contains(text(), "Regione:")]/following-sibling::text()[normalize-space()]'
+            );
+
+            $club[$id]['president'] = $this->getNodeValue(
+                $xpath,
+                $xpath_root . '//b[contains(text(), "Presidente:")]/following-sibling::text()[normalize-space()]'
+            );
+
+            $club[$id]['website'] =  $this->getNodeValue(
+                $xpath,
+                $xpath_root . '//a[b[contains(text(), "Sito Internet")]]/@href'
+            );
+
+            $address = explode(
+                '-',
+                $this->getNodeValue(
+                    $xpath,
+                    $xpath_root . '//b[contains(text(), "Indirizzo:")]
+                    /following-sibling::text()[normalize-space()]'
+                )
+            );
 
             $club[$id]['address'] = array(
                 'postal_code' => $this->trimString($address[0]) ?? '',
@@ -113,28 +100,24 @@ class Query
                 'city'        => $this->trimString($address[2]) ?? '',
             );
 
-            $getTelephone = $xpath->query(
-                $xpath_root .
-                    '//b[contains(text(), "Telefono:")]
-                /following-sibling::text()[normalize-space()]'
+            $club[$id]['contact']['tel'] = $this->getNodeValue(
+                $xpath,
+                $xpath_root . '//b[contains(text(), "Telefono:")]/following-sibling::text()[normalize-space()]'
             );
-            $club[$id]['contact']['tel'] = $getTelephone->length > 0 ?
-                $this->trimString($getTelephone->item(0)->nodeValue) : '';
 
-            $getEmail = $xpath->query(
-                $xpath_root .
-                    "//joomla-hidden-mail/@text"
-            );
-            $club[$id]['contact']['email'] = $getEmail->length > 0 ? base64_decode($getEmail->item(0)->nodeValue) : '';
+            $club[$id]['contact']['email'] = base64_decode($this->getNodeValue(
+                $xpath,
+                $xpath_root . '//joomla-hidden-mail/@text'
+            ));
 
-            $getCouncilors = $xpath->query(
-                $xpath_root .
-                    '//b[contains(text(), "Consiglio:")]
-                /following-sibling::text()'
+            $club[$id]['councilors'] = explode(
+                ';',
+                $this->getNodeValue(
+                    $xpath,
+                    $xpath_root . '//b[contains(text(), "Consiglio:")]/following-sibling::text()'
+                ),
+                -1
             );
-            $club[$id]['councilors']  = $getCouncilors->length > 0
-                ? array_map(array($this, 'trimString'), explode(';', $getCouncilors->item(0)->nodeValue, -1))
-                :  '';
 
             $position += 8;
         }
@@ -156,5 +139,13 @@ class Query
     public function trimString($str): string
     {
         return preg_replace('/^\s+|\s+$/u', '', $str);
+    }
+
+    public function getNodeValue($xpath, $node): string
+    {
+        $getNode = $xpath->query($node);
+        $getValue =  $getNode->length > 0 ? $this->trimString($getNode->item(0)->nodeValue) : '';
+
+        return $getValue;
     }
 }
