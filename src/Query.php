@@ -7,10 +7,12 @@ namespace Salsan\Clubs;
 use DOMDocument;
 use DOMXPath;
 use Salsan\Utils\DOM\DOMDocumentTrait;
+use Salsan\Utils\String\HiddenSpaceTrait;
 
 class Query
 {
     use DOMDocumentTrait;
+    use HiddenSpaceTrait;
 
     private DOMDocument $dom;
     private string $url = 'https://www.federscacchi.com/fsi/index.php/struttura/societa';
@@ -95,9 +97,9 @@ class Query
             );
 
             $club[$id]['address'] = array(
-                'postal_code' => $this->trimString($address[0]) ?? '',
-                'street'      => $this->trimString($address[1]) ?? '',
-                'city'        => $this->trimString($address[2]) ?? '',
+                'postal_code' => $this->trimmer($address[0]) ?? '',
+                'street'      => $this->trimmer($address[1]) ?? '',
+                'city'        => $this->trimmer($address[2]) ?? '',
             );
 
             $club[$id]['contact']['tel'] = $this->getNodeValue(
@@ -134,18 +136,5 @@ class Query
         $club_numbers = (int) $nodes->item(0)->nodeValue;
 
         return $club_numbers;
-    }
-
-    public function trimString($str): string
-    {
-        return preg_replace('/^\s+|\s+$/u', '', $str);
-    }
-
-    public function getNodeValue($xpath, $node): string
-    {
-        $getNode = $xpath->query($node);
-        $getValue =  $getNode->length > 0 ? $this->trimString($getNode->item(0)->nodeValue) : '';
-
-        return $getValue;
     }
 }
