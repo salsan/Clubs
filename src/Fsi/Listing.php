@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Salsan\Clubs;
+namespace Salsan\Clubs\Fsi;
 
 use DOMDocument;
 use Salsan\Utils\DOM\DOMDocumentTrait;
