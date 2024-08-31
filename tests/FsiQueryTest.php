@@ -29,7 +29,7 @@ final class FsiQueryTest extends TestCase
 
         foreach ($info as $club) {
             $this->assertStringContainsStringIgnoringCase('ASD ACCADEMIA SCACCHISTICA DON PIETRO CARRERA', $club['name']);
-            $this->assertStringContainsStringIgnoringCase('CT', $club['province']);
+            $this->assertStringContainsStringIgnoringCase('Catania', $club['province']);
             $this->assertStringContainsStringIgnoringCase('SICILIA', $club['region']);
             $this->assertIsString($club['president']);
             $this->assertIsString($club['website']);
