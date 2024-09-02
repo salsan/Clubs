@@ -1,7 +1,10 @@
 {
   "scripts": {
-    "PHPUnit": ".\\vendor\\bin\\phpunit",
-    "phpstan": ".\\vendor\\bin\\phpstan analyse src --level=max"
+    "Test": "vendor\\bin\\phpunit",
+    "Linter": "vendor\\bin\\phpcs -v",
+    "Beautifier": "vendor\\bin\\phpcbf -v",
+    "Benchmark": "vendor\\bin\\phpbench run tests/Benchmark --report=default"
+    "Analysis Static": ".\\vendor\\bin\\phpstan analyse src --level=max"
   },
   "name": "clubs",
   "directories": {
