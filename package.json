@@ -3,8 +3,8 @@
     "Test": "vendor\\bin\\phpunit",
     "Linter": "vendor\\bin\\phpcs -v",
     "Beautifier": "vendor\\bin\\phpcbf -v",
-    "Benchmark": "vendor\\bin\\phpbench run tests/Benchmark --report=default"
-    "Analysis Static": ".\\vendor\\bin\\phpstan analyse src --level=max"
+    "Benchmark": "vendor\\bin\\phpbench run tests/Benchmark --report=default",
+    "Analysis Static": "vendor\\bin\\phpstan analyse src --level=max"
   },
   "name": "clubs",
   "directories": {
