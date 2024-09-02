@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "PHPUnit": ".\\vendor\\bin\\phpunit"
+    "PHPUnit": ".\\vendor\\bin\\phpunit",
+    "phpstan": ".\\vendor\\bin\\phpstan analyse src --level=max"
   },
   "name": "clubs",
   "directories": {
