@@ -17,6 +17,11 @@ class Query
     private DOMDocument $dom;
     private string $url = 'https://www.federscacchi.com/fsi/index.php/struttura/societa';
 
+    /**
+     *
+     * @param array<string, string> $paramters
+     * @return void
+     */
     public function __construct(array $paramters)
     {
         $clubId = $paramters['clubId'] ?? '';
@@ -42,7 +47,13 @@ class Query
         $this->dom = $this->getHTML($this->url, null);
     }
 
-    public function getInfo(): iterable
+    /**
+     *
+     *
+     * @return array<string, array<string, array<int|string, mixed>|string>>
+     */
+
+    public function getInfo(): array
     {
         $club = array();
 
@@ -54,8 +65,9 @@ class Query
 
         for ($i = 0; $clubsNumber > $i; $i++) {
             $xpath_root = '//div[@class="alert alert-success"]
-                /following-sibling::div[ position() >' .  1 + $position
-                .  ' and position() < ' . 10 + $position  . ']';
+            /following-sibling::div[ position() > ' . (1 + $position) .
+                ' and position() < ' . (10 + $position) . ']';
+
 
             $id = $this->getNodeValue(
                 $xpath,
@@ -133,8 +145,13 @@ class Query
 
         $nodes = $xpath->query('//div[@class="container-fluid"]//div[@class="alert alert-success"]//b');
 
-        $club_numbers = (int) $nodes->item(0)->nodeValue;
+        if ($nodes === false || $nodes->length === 0) {
+            return 0;
+        }
 
-        return $club_numbers;
+        $node = $nodes->item(0);
+
+        $value = $node !== null ? (int) $node->textContent : 0;
+        return $value;
     }
 }

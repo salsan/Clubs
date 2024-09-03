@@ -22,7 +22,11 @@ class Listing
         $this->dom = $this->getHTML($url, null);
     }
 
-    public function clubs(): iterable
+    /**
+     *
+     * @return array<int, string>
+     */
+    public function clubs(): array
     {
         $clubs = [];
         $reg = '/\d+ - /m';

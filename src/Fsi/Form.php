@@ -22,26 +22,31 @@ class Form
         $this->dom = $this->getHTML($this->url, null);
     }
 
+    /**
+     * @return array<string, string>
+    */
     public function getRegions(): array
     {
         return ($this->getArray("'reg'", $this->dom));
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getProvinces(): array
     {
         return ($this->getArray("'pro'", $this->dom));
     }
-
-    // public function getOrder(): array
-    // {
-    //     return ($this->getArray("'ord'", $this->dom));
-    // }
-
+    /**
+     * @return array<string, string>
+     */
     public function getDirection(): array
     {
         return ($this->getArray("'senso'", $this->dom));
     }
-
+    /**
+     * @return array<string, string>
+     */
     public function getYears(): array
     {
         return ($this->getArray("'anno'", $this->dom));

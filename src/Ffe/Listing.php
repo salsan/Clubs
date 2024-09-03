@@ -12,12 +12,17 @@ class Listing
 {
     use DOMDocumentTrait;
 
-    private array $dom = array('clubs' => '', 'departments' => '');
-    public $url = array('clubs' => null, 'departments' => null);
+    /** @var array<string, DOMDocument> */
+    private array $dom = [];
+
+    /** @var array<string, ?string> */
+    public array $url = ['clubs' => null, 'departments' => null];
 
     public function __construct()
     {
+        // $this->dom['clubs'] = new DOMDocument();
         $this->dom['clubs'] = new DOMDocument();
+        $this->dom['departments'] = new DOMDocument();
         libxml_use_internal_errors(true);
 
 
@@ -28,6 +33,9 @@ class Listing
         $this->dom['departments'] =  $this->getHTML($this->url['departments'], null);
     }
 
+    /**
+     * @return string[]
+     */
     public function clubs(): array
     {
         $clubs = [];
@@ -39,8 +47,13 @@ class Listing
 
             $clubs_list = $xpath->query('//table//tr[not(@class="liste_titre")]//td[2]//b/text()');
 
-            foreach ($clubs_list as $club) {
-                array_push($clubs, $club->nodeValue);
+            if ($clubs_list !== false) {
+                foreach ($clubs_list as $club) {
+                    $clubName = $club->nodeValue;
+                    if ($clubName !== null) {
+                        $clubs[] = $clubName;
+                    }
+                }
             }
 
             $page++;
@@ -50,7 +63,11 @@ class Listing
         return $clubs;
     }
 
-    public function getPage($page_number)
+    /**
+     * @param int $page_number
+     * @return string
+     */
+    public function getPage(int $page_number): string
     {
         $postData = array(
             '__EVENTTARGET'   => 'ctl00$ContentPlaceHolderMain$PagerFooter',
@@ -77,25 +94,28 @@ class Listing
 
         curl_close($ch);
 
-        return $response;
+        return gettype($response) === 'string' ? $response : '';
     }
 
-    public function getPageNumber()
+    public function getPageNumber(): int
     {
         $xpath = new DOMXPath($this->dom['clubs']);
 
-        $last_page = $xpath->query('//table[@class="Pager"]//td[last()-1]//a/text()')[0]->nodeValue;
+        $last_page_nodes = $xpath->query('//table[@class="Pager"]//td[last()-1]//a/text()');
 
-        return $last_page;
+        return ($last_page_nodes !== false && $last_page_nodes->length > 0) ? (int) $last_page_nodes[0]->nodeValue : 0;
     }
 
-    public function getTable()
+    /**
+     * @return \DOMNode|null
+     */
+    public function getTable(): ?\DOMNode
     {
         $xpath = new DOMXPath($this->dom['clubs']);
 
-        $table = $xpath->query('//div[@class="page-mid"]/table')->item(0);
+        $table_nodes = $xpath->query('//div[@class="page-mid"]/table');
 
-        return $table;
+        return ($table_nodes !== false && $table_nodes->length > 0) ? $table_nodes->item(0) : null;
     }
 
     public function getNumber(): int
@@ -103,6 +123,9 @@ class Listing
         return count($this->clubs());
     }
 
+    /**
+     *  @return array<string, string> $departments
+     */
     public function departments(): array
     {
         $departments = [];
@@ -111,10 +134,16 @@ class Listing
 
         $areas = $xpath->query('//map[@name="MapDepartements"]/area');
 
+        if ($areas === false) {
+            return $departments;
+        }
+
         foreach ($areas as $area) {
             $page = $this->dom['departments']->saveHTML($area);
 
-            preg_match('/href="FicheComite\.aspx\?Ref=([0-9A-Za-z]+)".+alt="?([^"]+)"/', $page, $clubs);
+            if ($page !== false) {
+                preg_match('/href="FicheComite\.aspx\?Ref=([0-9A-Za-z]+)".+alt="?([^"]+)"/', $page, $clubs);
+            }
 
             if (isset($clubs[1]) && isset($clubs[2])) {
                 $departments[$clubs[1]] = $clubs[2];
